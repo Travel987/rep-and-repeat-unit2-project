@@ -1,0 +1,108 @@
+import { useEffect, useState } from "react";
+import "./App.css";
+
+function App() {
+  const [workouts, setWorkouts] = useState([]);
+  const [name, setName] = useState("");
+  const [workoutType, setWorkoutType] = useState("");
+  const [duration, setDuration] = useState("");
+  const [moodBefore, setMoodBefore] = useState("");
+  const [moodAfter, setMoodAfter] = useState("");
+
+
+
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/workouts")
+        .then((response) => response.json())
+        .then((data) => setWorkouts(data))
+        .catch((error) => console.error("Error:", error));
+  }, []);
+
+  const handleSubmit = (e) => {
+      e.preventDefault();
+
+      const newWorkout = {
+          name: name,
+          workoutType: workoutType,
+          duration: Number(duration),
+          moodBefore: Number(moodBefore),
+          moodAfter: Number(moodAfter)
+
+      };
+
+      fetch("http://localhost:8080/api/workouts", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newWorkout)
+      })
+          .then((response) => response.json())
+          .then((savedWorkout) => {
+              setWorkouts([...workouts, savedWorkout]);
+              setName("");
+              setWorkoutType("");
+              setDuration("");
+              setMoodBefore("");
+              setMoodAfter("");
+          });
+  };
+
+  return (
+      <div>
+        <h1>Rep & Repeat</h1>
+          <h2>Log a Workout</h2>
+        <h2>My Workouts</h2>
+          <form onSubmit={handleSubmit}>
+
+          <input
+              type="text"
+              placeholder="Workout Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              />
+          <input
+              type="text"
+              placeholder="Workout Type"
+              value={workoutType}
+              onChange={(e) => setWorkoutType(e.target.value)}
+          />
+          <input
+              type="number"
+              placeholder="Duration (minutes)"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+          />
+          <input
+              type="number"
+              placeholder="Mood Before (1-10)"
+              value={moodBefore}
+              onChange={(e) => setMoodBefore(e.target.value)}
+          />
+          <input
+              type="number"
+              placeholder="Mood After (1-10)"
+              value={moodAfter}
+              onChange={(e) => setMoodAfter(e.target.value)}
+          />
+              <button type="submit">
+                  Log Workout
+              </button>
+      </form>
+
+
+        {workouts.map((workout) => (
+            <div key={workout.id}>
+              <h3>{workout.name}</h3>
+              <p>Type: {workout.workoutType}</p>
+              <p>Duration: {workout.duration} minutes</p>
+              <p>Mood Before: {workout.moodBefore}</p>
+              <p>Mood After: {workout.moodAfter}</p>
+            </div>
+        ))}
+      </div>
+  );
+}
+
+export default App;
