@@ -72,15 +72,24 @@ function App() {
       setMoodAfter(workout.moodAfter);
   };
 
-  const handleDelete = (id) => {
-      fetch(`http://localhost:8080/api/workouts/${id})`,{
-          method: "DELETE"
-      })
-      .then(() => {
-          setWorkouts(workouts.filter((workout) => workout.id !== id));
-      });
+    const handleDelete = (id) => {
+        fetch(`http://localhost:8080/api/workouts/${id}`, {
+            method: "DELETE"
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Delete failed");
+                }
 
-  };
+                setWorkouts((currentWorkouts) =>
+                    currentWorkouts.filter((workout) => workout.id !== id)
+                );
+            })
+            .catch((error) => {
+                console.error("Delete error:", error);
+            });
+    };
+
 
   return (
       <div>
@@ -93,30 +102,40 @@ function App() {
               type="text"
               placeholder="Workout Name"
               value={name}
+              required
               onChange={(e) => setName(e.target.value)}
               />
           <input
               type="text"
               placeholder="Workout Type"
               value={workoutType}
+              required
               onChange={(e) => setWorkoutType(e.target.value)}
           />
           <input
               type="number"
               placeholder="Duration (minutes)"
               value={duration}
+              min="1"
+              required
               onChange={(e) => setDuration(e.target.value)}
           />
           <input
               type="number"
               placeholder="Mood Before (1-10)"
               value={moodBefore}
+              min="1"
+              max="10"
+              required
               onChange={(e) => setMoodBefore(e.target.value)}
           />
           <input
               type="number"
               placeholder="Mood After (1-10)"
               value={moodAfter}
+              min="1"
+              max="10"
+              required
               onChange={(e) => setMoodAfter(e.target.value)}
           />
               <button type="submit">
