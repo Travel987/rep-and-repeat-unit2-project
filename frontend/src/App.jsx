@@ -49,6 +49,16 @@ function App() {
           });
   };
 
+  const handleDelete = (id) => {
+      fetch(`http://localhost:8080/api/workouts/${id})`,{
+          method: "DELETE"
+      })
+      .then(() => {
+          setWorkouts(workouts.filter((workout) => workout.id !== id));
+      });
+
+  };
+
   return (
       <div>
         <h1>Rep & Repeat</h1>
@@ -99,6 +109,9 @@ function App() {
               <p>Duration: {workout.duration} minutes</p>
               <p>Mood Before: {workout.moodBefore}</p>
               <p>Mood After: {workout.moodAfter}</p>
+                <button onClick={() => handleDelete(workout.id)}>
+                    Delete
+                </button>
             </div>
         ))}
       </div>
