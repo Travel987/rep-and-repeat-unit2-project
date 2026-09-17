@@ -8,6 +8,7 @@ function App() {
   const [duration, setDuration] = useState("");
   const [moodBefore, setMoodBefore] = useState("");
   const [moodAfter, setMoodAfter] = useState("");
+  const [editingId, setEditingId] = useState(null);
 
 
 
@@ -31,8 +32,12 @@ function App() {
 
       };
 
-      fetch("http://localhost:8080/api/workouts", {
-          method: "POST",
+      fetch(
+          editingId
+              ? `http://localhost:8080/api/workouts/${editingId}`
+              : "http://localhost:8080/api/workouts",
+          {
+              method: editingId ? "PUT" : "POST",
           headers: {
               "Content-Type": "application/json"
           },
@@ -40,13 +45,31 @@ function App() {
       })
           .then((response) => response.json())
           .then((savedWorkout) => {
-              setWorkouts([...workouts, savedWorkout]);
+              if (editingId) {
+                  setWorkouts(
+                      workouts.map((workout) =>
+                          workout.id === editingId ? savedWorkout : workout
+                      )
+                  );
+              } else {
+                  setWorkouts([...workouts, savedWorkout]);
+              }
               setName("");
               setWorkoutType("");
               setDuration("");
               setMoodBefore("");
               setMoodAfter("");
+              setEditingId(null);
           });
+  };
+
+  const handleEdit = (workout) => {
+      setEditingId(workout.id);
+      setName(workout.name);
+      setWorkoutType(workout.workoutType);
+      setDuration(workout.duration);
+      setMoodBefore(workout.moodBefore);
+      setMoodAfter(workout.moodAfter);
   };
 
   const handleDelete = (id) => {
@@ -109,6 +132,9 @@ function App() {
               <p>Duration: {workout.duration} minutes</p>
               <p>Mood Before: {workout.moodBefore}</p>
               <p>Mood After: {workout.moodAfter}</p>
+                <button onClick={() => handleEdit(workout)}>
+                Edit
+                </button>
                 <button onClick={() => handleDelete(workout.id)}>
                     Delete
                 </button>
