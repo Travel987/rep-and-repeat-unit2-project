@@ -139,6 +139,10 @@ function App() {
         return moods[value] || "—";
     };
 
+    const todaysWorkout =
+        [...workouts].reverse().find((workout) => workout.exercise?.lenght > 0)
+    || workouts[workouts.length - 1];
+
   return (
       <div className="app">
           <aside className="sidebar">
@@ -231,9 +235,33 @@ function App() {
                               >
                                   🔥
                               </button>
+
                           </div>
+
+                          {workouts.length > 0 && (
+                              <div className="home-workout-card">
+                                  <p>TODAY'S WORKOUT</p>
+
+                                  <h2>{todaysWorkout.name}</h2>
+
+                                  <p>
+                                      {todaysWorkout.exercises?.length || 0}{" "}
+                                      {todaysWorkout.exercises?.length === 1 ? "exercise" : "exercises"}
+                                      {" • "}
+                                      {todaysWorkout.duration} min
+                                  </p>
+
+                                  <button
+                                      type="button"
+                                      onClick={() => setActivePage("workouts")}
+                                  >
+                                      START SESSION
+                                  </button>
+                              </div>
+                          )}
+
                       </div>
-                  )}
+                      )}
                   <p className="subtext">You showed up. Now go earn that stronger version of you.</p>
               </div>
               {activePage === "workouts" && (
@@ -313,12 +341,12 @@ function App() {
                   <button type="button"
                           className={moodBefore === "1" ? "selected-mood" : ""}
                           onClick={() => setMoodBefore("1")}
-                  >😫
+                  >🥱
                   </button>
                   <button type="button"
                           className={moodBefore === "2" ? "selected-mood" : ""}
                           onClick={() => setMoodBefore("2")}
-                  >😕
+                  >😩
                   </button>
                   <button type="button"
                           className={moodBefore === "3" ? "selected-mood" : ""}
@@ -330,7 +358,7 @@ function App() {
                           className={moodBefore === "4" ? "selected-mood" : ""}
                           onClick={() => setMoodBefore("4")}
                       >
-                          🙂
+                          😤
                       </button>
 
                       <button
@@ -338,7 +366,7 @@ function App() {
                           className={moodBefore === "5" ? "selected-mood" : ""}
                           onClick={() => setMoodBefore("5")}
                       >
-                          😄
+                          🔥
                       </button>
 
                   </div>
@@ -351,7 +379,7 @@ function App() {
                       className={moodAfter === "1" ? "selected-mood" : ""}
                       onClick={() => setMoodAfter("1")}
                   >
-                      😫
+                      😵‍💫
                   </button>
 
                   <button
@@ -359,7 +387,7 @@ function App() {
                       className={moodAfter === "2" ? "selected-mood" : ""}
                       onClick={() => setMoodAfter("2")}
                   >
-                      😕
+                      😮‍💨
                   </button>
 
                   <button
@@ -367,7 +395,7 @@ function App() {
                       className={moodAfter === "3" ? "selected-mood" : ""}
                       onClick={() => setMoodAfter("3")}
                   >
-                      😐
+                      🙂
                   </button>
 
                   <button
@@ -375,7 +403,7 @@ function App() {
                       className={moodAfter === "4" ? "selected-mood" : ""}
                       onClick={() => setMoodAfter("4")}
                   >
-                      🙂
+                      💪
                   </button>
 
                   <button
@@ -383,7 +411,7 @@ function App() {
                       className={moodAfter === "5" ? "selected-mood" : ""}
                       onClick={() => setMoodAfter("5")}
                   >
-                      😄
+                      🤩
                   </button>
               </div>
               </div>
