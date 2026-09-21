@@ -9,6 +9,12 @@ function App() {
   const [moodBefore, setMoodBefore] = useState("");
   const [moodAfter, setMoodAfter] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [exerciseName, setExerciseName] = useState("");
+  const [exerciseSets, setExerciseSets] = useState("");
+  const [exerciseReps, setExerciseReps] = useState("");
+  const [exerciseWeight, setExerciseWeight] = useState("");
+  const [exercises, setExercises] = useState([]);
+  const [activePage, setActivePage] = useState("home");
 
 
 
@@ -20,15 +26,41 @@ function App() {
         .catch((error) => console.error("Error:", error));
   }, []);
 
+    const handleAddExercise = () => {
+        if (!exerciseName || !exerciseSets || !exerciseReps || !exerciseWeight) {
+            alert("Please complete all exercise fields.");
+            return;
+        }
+
+        const newExercise = {
+            name: exerciseName,
+            sets: Number(exerciseSets),
+            reps: Number(exerciseReps),
+            weight: Number(exerciseWeight)
+        };
+
+        setExercises([...exercises, newExercise]);
+
+        setExerciseName("");
+        setExerciseSets("");
+        setExerciseReps("");
+        setExerciseWeight("");
+    };
+
   const handleSubmit = (e) => {
       e.preventDefault();
+      if ( !moodBefore || !moodAfter) {
+          alert("Please select both Mood Before and Mood After.");
+          return;
+      }
 
       const newWorkout = {
           name: name,
           workoutType: workoutType,
           duration: Number(duration),
           moodBefore: Number(moodBefore),
-          moodAfter: Number(moodAfter)
+          moodAfter: Number(moodAfter),
+          exercises: exercises
 
       };
 
@@ -60,88 +92,329 @@ function App() {
               setMoodBefore("");
               setMoodAfter("");
               setEditingId(null);
+              setExercises([]);
           });
   };
 
   const handleEdit = (workout) => {
+      setActivePage("workouts");
       setEditingId(workout.id);
       setName(workout.name);
       setWorkoutType(workout.workoutType);
       setDuration(workout.duration);
       setMoodBefore(workout.moodBefore);
       setMoodAfter(workout.moodAfter);
+      setExercises(workout.exercises || []);
   };
 
-  const handleDelete = (id) => {
-      fetch(`http://localhost:8080/api/workouts/${id})`,{
-          method: "DELETE"
-      })
-      .then(() => {
-          setWorkouts(workouts.filter((workout) => workout.id !== id));
-      });
+    const handleDelete = (id) => {
+        fetch(`http://localhost:8080/api/workouts/${id}`, {
+            method: "DELETE"
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Delete failed");
+                }
 
-  };
+                setWorkouts((currentWorkouts) =>
+                    currentWorkouts.filter((workout) => workout.id !== id)
+                );
+            })
+            .catch((error) => {
+                console.error("Delete error:", error);
+            });
+    };
+
+    const getMoodEmoji = (mood) => {
+        const value = Number(mood);
+
+        const moods = {
+            1: "😫",
+            2: "😕",
+            3: "😐",
+            4: "🙂",
+            5: "😄"
+        };
+
+        return moods[value] || "—";
+    };
 
   return (
-      <div>
-        <h1>Rep & Repeat</h1>
-          <h2>Log a Workout</h2>
-        <h2>My Workouts</h2>
-          <form onSubmit={handleSubmit}>
+      <div className="app">
+          <aside className="sidebar">
+              <div className="logo">
+                  <span>REP</span>
+                  <small>& REPEAT</small>
+              </div>
+
+              <nav>
+                  <button
+                      type="button"
+                      className={`nav-item ${activePage === "home" ? "active" : ""}`}
+                      onClick={() => setActivePage("home")}
+                  >
+                      ⌂ Home
+                  </button>
+
+                  <button
+                      type="button"
+                      className={`nav-item ${activePage === "workouts" ? "active" : ""}`}
+                      onClick={() => setActivePage("workouts")}
+                  >
+                      ▣ Workouts
+                  </button>
+
+                  <button
+                      type="button"
+                      className={`nav-item ${activePage === "history" ? "active" : ""}`}
+                      onClick={() => setActivePage("history")}
+                  >
+                      ↻ History
+                  </button>
+
+                  <button
+                      type="button"
+                      className={`nav-item ${activePage === "music" ? "active" : ""}`}
+                      onClick={() => setActivePage("music")}
+                  >
+                      ♫ Music
+                  </button>
+              </nav>
+          </aside>
+          <main className="main-content">
+
+              <div className="page-header">
+                  <p className="eyebrow">TONIGHT IS YOURS</p>
+                  <h1>Time to put in WORK.</h1>
+                  {activePage === "home" && (
+                      <div className="home-dashboard">
+                          <h2>Set the mood</h2>
+                          <p>How are you feeling?</p>
+
+                          <div className="mood-picker">
+                              <button
+                                  type="button"
+                                  className={moodBefore === "1" ? "selected-mood" : ""}
+                                  onClick={() => setMoodBefore("1")}
+                              >
+                                  🥱
+                              </button>
+
+                              <button
+                                  type="button"
+                                  className={moodBefore === "2" ? "selected-mood" : ""}
+                                  onClick={() => setMoodBefore("2")}
+                              >
+                                  😩
+                              </button>
+
+                              <button
+                                  type="button"
+                                  className={moodBefore === "3" ? "selected-mood" : ""}
+                                  onClick={() => setMoodBefore("3")}
+                              >
+                                  😐
+                              </button>
+
+                              <button
+                                  type="button"
+                                  className={moodBefore === "4" ? "selected-mood" : ""}
+                                  onClick={() => setMoodBefore("4")}
+                              >
+                                  😤
+                              </button>
+
+                              <button
+                                  type="button"
+                                  className={moodBefore === "5" ? "selected-mood" : ""}
+                                  onClick={() => setMoodBefore("5")}
+                              >
+                                  🔥
+                              </button>
+                          </div>
+                      </div>
+                  )}
+                  <p className="subtext">You showed up. Now go earn that stronger version of you.</p>
+              </div>
+              {activePage === "workouts" && (
+                  <>
+              <h2 className="section-title">Log a Workout</h2>
+              <h2 className="section-title">My Workouts</h2>
+          <form className="workout-form" onSubmit={handleSubmit}>
 
           <input
               type="text"
-              placeholder="Workout Name"
+              placeholder="Workout"
               value={name}
               onChange={(e) => setName(e.target.value)}
               />
           <input
               type="text"
-              placeholder="Workout Type"
+              placeholder="Type"
               value={workoutType}
               onChange={(e) => setWorkoutType(e.target.value)}
           />
           <input
               type="number"
-              placeholder="Duration (minutes)"
+              placeholder="Minutes"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
           />
-          <input
-              type="number"
-              placeholder="Mood Before (1-10)"
-              value={moodBefore}
-              onChange={(e) => setMoodBefore(e.target.value)}
-          />
-          <input
-              type="number"
-              placeholder="Mood After (1-10)"
-              value={moodAfter}
-              onChange={(e) => setMoodAfter(e.target.value)}
-          />
+              <div className="exercise-builder">
+                  <input
+                      type="text"
+                      placeholder="Exercise"
+                      value={exerciseName}
+                      onChange={(e) => setExerciseName(e.target.value)}
+                  />
+                  <input
+                      type="number"
+                      placeholder="Sets"
+                      value={exerciseSets}
+                      onChange={(e) => setExerciseSets(e.target.value)}
+                  />
+
+                  <input
+                      type="number"
+                      placeholder="Reps"
+                      value={exerciseReps}
+                      onChange={(e) => setExerciseReps(e.target.value)}
+                  />
+
+                  <input
+                      type="number"
+                      placeholder="Weight"
+                      value={exerciseWeight}
+                      onChange={(e) => setExerciseWeight(e.target.value)}
+                  />
+
+                  <button type="button" onClick={handleAddExercise}>
+                      + Add Exercise
+                  </button>
+              </div>
+              {exercises.length > 0 && (
+                  <div className="exercise-list">
+                      <h3>Exercise Queue</h3>
+
+                      {exercises.map((exercise, index) => (
+                          <div className="exercise-item" key={index}>
+                              <strong>{index + 1}. {exercise.name}</strong>
+                              <span>
+                    {exercise.sets} × {exercise.reps} • {exercise.weight} lbs
+                </span>
+                          </div>
+                      ))}
+                  </div>
+              )}
+              <div className="mood-section">
+                  <span>Mood Before</span>
+                  <div className="mood-picker">
+
+                  <button type="button"
+                          className={moodBefore === "1" ? "selected-mood" : ""}
+                          onClick={() => setMoodBefore("1")}
+                  >😫
+                  </button>
+                  <button type="button"
+                          className={moodBefore === "2" ? "selected-mood" : ""}
+                          onClick={() => setMoodBefore("2")}
+                  >😕
+                  </button>
+                  <button type="button"
+                          className={moodBefore === "3" ? "selected-mood" : ""}
+                          onClick={() => setMoodBefore("3")}
+                  >😐
+                  </button>
+                      <button
+                          type="button"
+                          className={moodBefore === "4" ? "selected-mood" : ""}
+                          onClick={() => setMoodBefore("4")}
+                      >
+                          🙂
+                      </button>
+
+                      <button
+                          type="button"
+                          className={moodBefore === "5" ? "selected-mood" : ""}
+                          onClick={() => setMoodBefore("5")}
+                      >
+                          😄
+                      </button>
+
+                  </div>
+              </div>
+              <div className="mood-section">
+                  <span>Mood After</span>
+                  <div className="mood-picker">
+                  <button
+                      type="button"
+                      className={moodAfter === "1" ? "selected-mood" : ""}
+                      onClick={() => setMoodAfter("1")}
+                  >
+                      😫
+                  </button>
+
+                  <button
+                      type="button"
+                      className={moodAfter === "2" ? "selected-mood" : ""}
+                      onClick={() => setMoodAfter("2")}
+                  >
+                      😕
+                  </button>
+
+                  <button
+                      type="button"
+                      className={moodAfter === "3" ? "selected-mood" : ""}
+                      onClick={() => setMoodAfter("3")}
+                  >
+                      😐
+                  </button>
+
+                  <button
+                      type="button"
+                      className={moodAfter === "4" ? "selected-mood" : ""}
+                      onClick={() => setMoodAfter("4")}
+                  >
+                      🙂
+                  </button>
+
+                  <button
+                      type="button"
+                      className={moodAfter === "5" ? "selected-mood" : ""}
+                      onClick={() => setMoodAfter("5")}
+                  >
+                      😄
+                  </button>
+              </div>
+              </div>
               <button type="submit">
                   Log Workout
               </button>
       </form>
+                      </>
+              )}
+                      {activePage === "history" && (
+                          <>
+                              <h1>Look at you putting in WORK.</h1>
+                              <h2>Recent Workouts</h2>
 
+                              {workouts.map((workout) => (
+                                  <div className="workout-card" key={workout.id}>
+                                      <h3>{workout.name}</h3>
+                                      <p>Type: {workout.workoutType}</p>
+                                      <p>Duration: {workout.duration} minutes</p>
+                                      <p>Mood Before: {getMoodEmoji(workout.moodBefore)}</p>
+                                      <p>Mood After: {getMoodEmoji(workout.moodAfter)}</p>
 
-        {workouts.map((workout) => (
-            <div key={workout.id}>
-              <h3>{workout.name}</h3>
-              <p>Type: {workout.workoutType}</p>
-              <p>Duration: {workout.duration} minutes</p>
-              <p>Mood Before: {workout.moodBefore}</p>
-              <p>Mood After: {workout.moodAfter}</p>
-                <button onClick={() => handleEdit(workout)}>
-                Edit
-                </button>
-                <button onClick={() => handleDelete(workout.id)}>
-                    Delete
-                </button>
-            </div>
-        ))}
-      </div>
-  );
-}
+                                      <button onClick={() => handleEdit(workout)}>Edit</button>
+                                      <button onClick={() => handleDelete(workout.id)}>Delete</button>
+                                  </div>
+                              ))}
+                          </>
+                      )}
+          </main>
+          </div>
+          );
+          }
 
 export default App;
