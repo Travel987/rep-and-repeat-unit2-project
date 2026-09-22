@@ -15,7 +15,27 @@ function App() {
   const [exerciseWeight, setExerciseWeight] = useState("");
   const [exercises, setExercises] = useState([]);
   const [activePage, setActivePage] = useState("home");
+  const [selectedVibe, setSelectedVibe] = useState("locked");
+  const [mixSelected, setMixSelected] = useState(false);
+    const vibeSongs = {
+        locked: {
+            title: "The Language",
+            artist: "Drake",
+            mix: "Late Night Lift"
+        },
+        high: {
+            title: "Higher",
+            artist: "Eminem",
+            mix: "High Energy"
+        },
+        calm: {
+            title: "We Are the People",
+            artist: "Empire of the Sun",
+            mix: "Calm Focus"
+        }
+    };
 
+    const currentSong = vibeSongs[selectedVibe];
 
 
 
@@ -188,8 +208,12 @@ function App() {
           <main className="main-content">
 
               <div className="page-header">
-                  <p className="eyebrow">TONIGHT IS YOURS</p>
-                  <h1>Time to put in WORK.</h1>
+                  {activePage === "home" && (
+                      <>
+                          <p className="eyebrow">TONIGHT IS YOURS</p>
+                          <h1>Time to put in WORK.</h1>
+                      </>
+                  )}
                   {activePage === "home" && (
                       <div className="home-dashboard">
                           <h2>Set the mood</h2>
@@ -262,7 +286,11 @@ function App() {
 
                       </div>
                       )}
-                  <p className="subtext">You showed up. Now go earn that stronger version of you.</p>
+                  {activePage === "home" && (
+                      <p className="subtext">
+                          You showed up. Now go earn that stronger version of you.
+                      </p>
+                  )}
               </div>
               {activePage === "workouts" && (
                   <>
@@ -440,6 +468,86 @@ function App() {
                               ))}
                           </>
                       )}
+
+              {activePage === "music" && (
+                  <div className="music-page">
+                      <p className="eyebrow">BRING THE ENERGY</p>
+                      <h1>Turn it UP.</h1>
+                      <p className="subtext">
+                          Choose the soundtrack that makes you feel unstoppable.
+                      </p>
+
+                      <div className="music-layout">
+
+                          <div className="vibe-panel">
+                              <h2>Choose your workout vibe</h2>
+                              <p>Your choice shapes the suggested mix.</p>
+
+                              <button
+                                  type="button"
+                                  className={`vibe-option ${selectedVibe === "locked" ? "selected-vibe" : ""}`}
+                                  onClick={() => {
+                                      setSelectedVibe("locked");
+                                      setMixSelected(false);
+                                  }}
+                              >
+                                  <strong>LOCKED IN</strong>
+                                  <span>Focused bars + heavy bass</span>
+                              </button>
+
+                              <button
+                                  type="button"
+                                  className={`vibe-option ${selectedVibe === "high" ? "selected-vibe" : ""}`}
+                                  onClick={() => {
+                                      setSelectedVibe("high");
+                                      setMixSelected(false);
+                                  }}
+                              >
+                                  <strong>HIGH ENERGY</strong>
+                                  <span>Fast tempo + big hooks</span>
+                              </button>
+
+                              <button
+                                  type="button"
+                                  className={`vibe-option ${selectedVibe === "calm" ? "selected-vibe" : ""}`}
+                                  onClick={() => {
+                                      setSelectedVibe("calm");
+                                      setMixSelected(false);
+                                  }}
+                              >
+                                  <strong>CALM FOCUS</strong>
+                                  <span>Smooth rhythm + steady pace</span>
+                              </button>
+
+                              <button
+                                  type="button"
+                                  className="use-mix-button"
+                                  onClick={() => setMixSelected(true)}
+                              >
+                                  {mixSelected ? "✓ MIX SELECTED" : "USE THIS MIX"}
+                              </button>
+                          </div>
+
+                          <div className="now-playing-panel">
+                              <p className="eyebrow">NOW PLAYING</p>
+
+                              <div className="album-placeholder">
+                                  R&R
+                              </div>
+
+                              <h2>{currentSong.title}</h2>
+                              <p>{currentSong.artist} • {currentSong.mix}</p>
+
+                              <div className="player-controls">
+                                  <button type="button">◀</button>
+                                  <button type="button">▶</button>
+                                  <button type="button">▶</button>
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+              )}
           </main>
           </div>
           );

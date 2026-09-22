@@ -186,3 +186,141 @@
     margin-bottom: 8px;
     font-weight: bold;
 }
+/* MUSIC PAGE */
+
+.music-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.music-page > .eyebrow {
+    color: #c7ff00;
+    margin-bottom: 6px;
+}
+
+.music-page > h1 {
+    font-size: 42px;
+    margin: 0 0 8px;
+}
+
+.music-page > .subtext {
+    margin-bottom: 30px;
+}
+
+.music-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.vibe-panel,
+.now-playing-panel {
+    background: #27384a;
+    border: 1px solid #5f7890;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.vibe-panel h2 {
+    margin-top: 0;
+}
+
+.vibe-panel > p {
+    margin-bottom: 22px;
+}
+
+.vibe-option {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+}
+
+.vibe-option strong {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.vibe-option span {
+    font-size: 13px;
+}
+
+.use-mix-button {
+    width: 45%;
+    margin-top: 10px;
+    padding: 14px;
+}
+
+.now-playing-panel {
+    text-align: left;
+}
+
+.album-placeholder {
+    height: 150px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: bold;
+    margin: 18px 0;
+    background: #6e4a7e;
+}
+
+.player-controls {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.player-controls button {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+}
+
+@media (max-width: 800px) {
+    .music-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .use-mix-button {
+        width: 100%;
+    }
+}
+.vibe-option:nth-of-type(1) {
+    background: #315d70;
+    border: 2px solid #78d7f0;
+}
+
+.vibe-option:nth-of-type(2) {
+    background: #65476f;
+    border: 2px solid #c78be6;
+}
+
+.vibe-option:nth-of-type(3) {
+    background: #46664e;
+    border: 2px solid #8ed6a1;
+}
+
+.vibe-option {
+    color: white;
+}
+
+.use-mix-button {
+    background: #8fddeb;
+    color: #15202b;
+    border: none;
+    font-weight: bold;
+}
+.selected-vibe {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px #c7ff00;
+}
