@@ -17,27 +17,45 @@ function App() {
   const [activePage, setActivePage] = useState("home");
   const [selectedVibe, setSelectedVibe] = useState("locked");
   const [mixSelected, setMixSelected] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState("");
+
     const vibeSongs = {
         locked: {
             title: "The Language",
             artist: "Drake",
-            mix: "Late Night Lift"
+            mix: "Late Night Lift",
+            spotifyId: "6df0bdSOGYU6NHZWlEcHXP"
         },
         high: {
             title: "Higher",
             artist: "Eminem",
-            mix: "High Energy"
+            mix: "High Energy",
+            spotifyId: "1wwnN2wOvZOsPp4Nh8E4i3"
         },
         calm: {
             title: "We Are the People",
             artist: "Empire of the Sun",
-            mix: "Calm Focus"
+            mix: "Calm Focus",
+            spotifyId: "57RHMnLMQx8Qz5V6c0E8dF"
         }
     };
 
     const currentSong = vibeSongs[selectedVibe];
+    useEffect(() => {
+        const searchTerm = encodeURIComponent(
+            `${currentSong.artist} ${currentSong.title}`
+        );
 
-
+        fetch(`https://itunes.apple.com/search?term=${searchTerm}&entity=song&limit=1`)
+            .then((response) => response.json())
+            .then((data) => {
+                setPreviewUrl(data.results[0]?.previewUrl || "");
+            })
+            .catch((error) => {
+                console.error("Music preview error:", error);
+                setPreviewUrl("");
+            });
+    }, [selectedVibe]);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/workouts")
@@ -538,11 +556,15 @@ function App() {
                               <h2>{currentSong.title}</h2>
                               <p>{currentSong.artist} • {currentSong.mix}</p>
 
-                              <div className="player-controls">
-                                  <button type="button">◀</button>
-                                  <button type="button">▶</button>
-                                  <button type="button">▶</button>
-                              </div>
+                              {previewUrl ? (
+                                  <audio
+                                      key={previewUrl}
+                                      controls
+                                      src={previewUrl}
+                                  />
+                              ) : (
+                                  <p>Preview unavailable</p>
+                              )}
                           </div>
 
                       </div>
