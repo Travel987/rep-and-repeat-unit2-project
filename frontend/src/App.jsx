@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
+import bicepCurlGif from "./assets/exercises/bicep-curl.gif";
+import shoulderPressGif from "./assets/exercises/shoulder-press.gif";
+import skullCrushersGif from "./assets/exercises/skull-crushers.gif";
+
 
 function App() {
   const [workouts, setWorkouts] = useState([]);
   const [name, setName] = useState("");
-  const [workoutType, setWorkoutType] = useState("");
-  const [duration, setDuration] = useState("");
+  const [workoutType, setWorkoutType] = useState("Strength");
+  const [duration, setDuration] = useState("45");
   const [moodBefore, setMoodBefore] = useState("");
   const [moodAfter, setMoodAfter] = useState("");
   const [editingId, setEditingId] = useState(null);
@@ -23,6 +27,13 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
+
+
+    const exerciseImages = {
+        "bicep curl": bicepCurlGif,
+        "shoulder press": shoulderPressGif,
+        "skull crushers": skullCrushersGif,
+    };
 
     const vibeSongs = {
         locked: {
@@ -341,29 +352,24 @@ function App() {
               </div>
               {activePage === "workouts" && (
                   <>
-              <h2 className="section-title">Log a Workout</h2>
-              <h2 className="section-title">My Workouts</h2>
+                      <div className="workouts-header">
+                          <p className="eyebrow">BUILD THE WIN</p>
+                          <h1>Create your next victory.</h1>
+                          <p className="workouts-subtitle">
+                              Pick the moves. Set the challenge. Make it yours.
+                          </p>
+                      </div>
           <form className="workout-form" onSubmit={handleSubmit}>
 
-          <input
-              type="text"
-              placeholder="Workout"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              />
-          <input
-              type="text"
-              placeholder="Type"
-              value={workoutType}
-              onChange={(e) => setWorkoutType(e.target.value)}
-          />
-          <input
-              type="number"
-              placeholder="Minutes"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-          />
-              <div className="exercise-builder">
+              <div className="session-panel">
+                  <h2>Session details</h2>
+                  <input
+                      type="text"
+                      placeholder="Workout"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      />
+                  <div className="exercise-builder">
                   <input
                       type="text"
                       placeholder="Exercise"
@@ -395,20 +401,43 @@ function App() {
                       + Add Exercise
                   </button>
               </div>
+
+              </div>
+              <div className="queue-panel">
+                  <h2>Exercise queue</h2>
               {exercises.length > 0 && (
                   <div className="exercise-list">
-                      <h3>Exercise Queue</h3>
 
                       {exercises.map((exercise, index) => (
-                          <div className="exercise-item" key={index}>
-                              <strong>{index + 1}. {exercise.name}</strong>
-                              <span>
-                    {exercise.sets} × {exercise.reps} • {exercise.weight} lbs
-                </span>
+                          <div className={`exercise-item exercise-card-${index % 3}`} key={index}>
+
+                              <div className="exercise-thumbnail">
+                                  {exerciseImages[exercise.name.toLowerCase()] ? (
+                                      <img
+                                          src={exerciseImages[exercise.name.toLowerCase()]}
+                                          alt={`${exercise.name} demonstration`}
+                                      />
+                                  ) : (
+                                      <span>🏋️</span>
+                                  )}
+                              </div>
+                              <div className="exercise-info">
+                                  <strong>{exercise.name}</strong>
+
+                                  <span>
+                {exercise.sets} × {exercise.reps} • {exercise.weight} lbs
+            </span>
+                              </div>
+
+                              <div className="exercise-number">
+                                  {String(index + 1).padStart(2, "0")}
+                              </div>
+
                           </div>
                       ))}
                   </div>
               )}
+              </div>
               <div className="mood-section">
                   <span>Mood Before</span>
                   <div className="mood-picker">
