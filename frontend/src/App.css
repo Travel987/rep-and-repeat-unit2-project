@@ -262,6 +262,7 @@
 }
 
 .album-placeholder {
+    width: 150px;
     height: 150px;
     border-radius: 14px;
     display: flex;
@@ -271,6 +272,15 @@
     font-weight: bold;
     margin: 18px 0;
     background: #6e4a7e;
+    overflow: hidden;
+}
+
+.album-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
 }
 
 .player-controls {
@@ -323,4 +333,50 @@
 .selected-vibe {
     transform: scale(1.02);
     box-shadow: 0 0 0 3px #c7ff00;
+}
+.music-player {
+    width: 100%;
+    margin-top: 14px;
+    height: 40px;
+}
+.custom-player {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 14px;
+}
+
+.custom-play-button {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    background: #dfff00;
+    color: #111;
+    cursor: pointer;
+}
+
+.player-time {
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.progress-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #dfff00;
+    border-radius: 999px;
 }

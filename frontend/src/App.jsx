@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 function App() {
@@ -18,6 +18,11 @@ function App() {
   const [selectedVibe, setSelectedVibe] = useState("locked");
   const [mixSelected, setMixSelected] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
+  const [artworkUrl, setArtworkUrl] = useState("");
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [audioDuration, setAudioDuration] = useState(0);
 
     const vibeSongs = {
         locked: {
@@ -41,6 +46,25 @@ function App() {
     };
 
     const currentSong = vibeSongs[selectedVibe];
+    const togglePlay = () => {
+        const audio = audioRef.current;
+
+        if (!audio) return;
+
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    };
+    const formatTime = (time) => {
+        if (!time || Number.isNaN(time)) return "0:00";
+
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+
+        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    };
     useEffect(() => {
         const searchTerm = encodeURIComponent(
             `${currentSong.artist} ${currentSong.title}`
@@ -49,7 +73,12 @@ function App() {
         fetch(`https://itunes.apple.com/search?term=${searchTerm}&entity=song&limit=1`)
             .then((response) => response.json())
             .then((data) => {
-                setPreviewUrl(data.results[0]?.previewUrl || "");
+                const song = data.results[0];
+
+                setPreviewUrl(song?.previewUrl || "");
+                setArtworkUrl(
+                    song?.artworkUrl100?.replace("100x100bb", "600x600bb") || ""
+                );
             })
             .catch((error) => {
                 console.error("Music preview error:", error);
@@ -550,21 +579,72 @@ function App() {
                               <p className="eyebrow">NOW PLAYING</p>
 
                               <div className="album-placeholder">
-                                  R&R
+                                  {artworkUrl ? (
+                                      <img
+                                          src={artworkUrl}
+                                          alt={`${currentSong.title} album cover`}
+                                      />
+                                  ) : (
+                                      "R&R"
+                                  )}
                               </div>
 
                               <h2>{currentSong.title}</h2>
                               <p>{currentSong.artist} • {currentSong.mix}</p>
 
                               {previewUrl ? (
-                                  <audio
-                                      key={previewUrl}
-                                      controls
-                                      src={previewUrl}
-                                  />
-                              ) : (
-                                  <p>Preview unavailable</p>
-                              )}
+                                          <>
+                                              <audio
+                                                  ref={audioRef}
+                                                  key={previewUrl}
+                                                  src={previewUrl}
+                                                  preload="metadata"
+                                                  onPlay={() => setIsPlaying(true)}
+                                                  onPause={() => setIsPlaying(false)}
+                                                  onTimeUpdate={(event) =>
+                                                      setCurrentTime(event.currentTarget.currentTime)
+                                                  }
+                                                  onLoadedMetadata={(event) =>
+                                                      setAudioDuration(event.currentTarget.duration)
+                                                  }
+                                                  onEnded={() => setIsPlaying(false)}
+                                              />
+
+                                              <div className="custom-player">
+                                                  <button
+                                                      type="button"
+                                                      className="custom-play-button"
+                                                      onClick={togglePlay}
+                                                  >
+                                                      {isPlaying ? "❚❚" : "▶"}
+                                                  </button>
+
+                                                  <span className="player-time">
+                                                    {formatTime(currentTime)}
+                                                        </span>
+
+                                                  <div className="progress-track">
+                                                      <div
+                                                          className="progress-fill"
+                                                          style={{
+                                                              width: `${
+                                                                  audioDuration
+                                                                      ? (currentTime / audioDuration) * 100
+                                                                      : 0
+                                                              }%`
+                                                          }}
+                                                      />
+                                                  </div>
+
+                                                  <span className="player-time">
+        {formatTime(audioDuration)}
+    </span>
+                                              </div>
+                                              </>
+                                  ) : (
+
+                                          <p>Preview unavailable</p>
+                                      )}
                           </div>
 
                       </div>
