@@ -1,3 +1,5 @@
+import NavButton from "./NavButton";
+
 function Sidebar({ activePage, setActivePage }) {
     return (
         <aside className="sidebar">
@@ -7,37 +9,37 @@ function Sidebar({ activePage, setActivePage }) {
             </div>
 
             <nav>
-                <button
-                    type="button"
-                    className={`nav-item ${activePage === "home" ? "active" : ""}`}
-                    onClick={() => setActivePage("home")}
+                <NavButton
+                    page="home"
+                    activePage={activePage}
+                    setActivePage={setActivePage}
                 >
                     ⌂ Home
-                </button>
+                </NavButton>
 
-                <button
-                    type="button"
-                    className={`nav-item ${activePage === "workouts" ? "active" : ""}`}
-                    onClick={() => setActivePage("workouts")}
+                <NavButton
+                    page="workouts"
+                    activePage={activePage}
+                    setActivePage={setActivePage}
                 >
                     ▣ Workouts
-                </button>
+                </NavButton>
 
-                <button
-                    type="button"
-                    className={`nav-item ${activePage === "history" ? "active" : ""}`}
-                    onClick={() => setActivePage("history")}
+                <NavButton
+                    page="history"
+                    activePage={activePage}
+                    setActivePage={setActivePage}
                 >
-                    ◔ History
-                </button>
+                    ◷ History
+                </NavButton>
 
-                <button
-                    type="button"
-                    className={`nav-item ${activePage === "music" ? "active" : ""}`}
-                    onClick={() => setActivePage("music")}
+                <NavButton
+                    page="music"
+                    activePage={activePage}
+                    setActivePage={setActivePage}
                 >
                     ♫ Music
-                </button>
+                </NavButton>
             </nav>
         </aside>
     );
