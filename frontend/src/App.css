@@ -769,3 +769,36 @@
         padding: 20px;
     }
 }
+.home-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 22px;
+}
+
+.home-stat-card {
+    background: rgba(35, 50, 65, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+}
+
+.home-stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.home-stat-label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+@media (max-width: 600px) {
+    .home-stats {
+        grid-template-columns: 1fr;
+    }
+}

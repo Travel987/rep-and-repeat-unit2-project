@@ -335,6 +335,41 @@ function App() {
                       </div>
                   )}
 
+              {activePage === "home" && (
+                  <div className="home-stats">
+                      <div className="home-stat-card">
+                          <span className="home-stat-number">{workouts.length}</span>
+                          <span className="home-stat-label">workouts</span>
+                      </div>
+
+                      <div className="home-stat-card">
+      <span className="home-stat-number">
+        {workouts.reduce((total, workout) => total + (workout.duration || 0), 0)}
+      </span>
+                          <span className="home-stat-label">minutes trained</span>
+                      </div>
+
+                      <div className="home-stat-card">
+      <span className="home-stat-number">
+        {workouts.reduce(
+            (total, workout) =>
+                total +
+                (workout.exercises || []).reduce(
+                    (sum, exercise) =>
+                        sum +
+                        (exercise.weight || 0) *
+                        (exercise.sets || 0) *
+                        (exercise.reps || 0),
+                    0
+                ),
+            0
+        )}
+      </span>
+                          <span className="home-stat-label">lbs lifted</span>
+                      </div>
+                  </div>
+              )}
+
               {activePage === "about" && (
                   <AboutPage />
               )}
