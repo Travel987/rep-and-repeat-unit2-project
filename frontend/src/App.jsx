@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import bicepCurlGif from "./assets/exercises/bicep-curl.gif";
@@ -10,6 +11,9 @@ import WorkoutCard from"./components/WorkoutCard";
 import ExerciseCard from "./components/ExerciseCard";
 
 function App() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [formError, setFormError] = useState("");
   const [workouts, setWorkouts] = useState([]);
   const [name, setName] = useState("");
   const [workoutType, setWorkoutType] = useState("Strength");
@@ -22,7 +26,11 @@ function App() {
   const [exerciseReps, setExerciseReps] = useState("");
   const [exerciseWeight, setExerciseWeight] = useState("");
   const [exercises, setExercises] = useState([]);
-  const [activePage, setActivePage] = useState("home");
+    const activePage =
+        location.pathname === "/" ? "home" : location.pathname.slice(1);
+    const setActivePage = (page) => {
+        navigate(page === "home" ? "/" : `/${page}`);
+    };
   const [selectedVibe, setSelectedVibe] = useState("locked");
   const [mixSelected, setMixSelected] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
@@ -110,7 +118,7 @@ function App() {
 
     const handleAddExercise = () => {
         if (!exerciseName || !exerciseSets || !exerciseReps || !exerciseWeight) {
-            alert("Please complete all exercise fields.");
+            setFormError("Please complete all exercise fields.");
             return;
         }
 
@@ -132,7 +140,7 @@ function App() {
   const handleSubmit = (e) => {
       e.preventDefault();
       if (!moodAfter) {
-          alert("Please select Mood After.");
+          setFormError("Please select Mood After.");
           return;
       }
 
@@ -337,6 +345,9 @@ function App() {
                           </p>
                       </div>
           <form className="workout-form" onSubmit={handleSubmit}>
+              {formError && (
+                  <p className="form-error">{formError}</p>
+              )}
 
               <div className="session-panel">
                   <h2>Session details</h2>
