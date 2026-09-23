@@ -685,9 +685,10 @@
     font-size: 0.8rem;
     opacity: 0.65;
 }
-
 .form-error {
+    grid-column: 1 / -1;
     color: #ffb3b3;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin: 0 0 8px;
+    text-align: center;
 }
