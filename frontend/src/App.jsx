@@ -548,14 +548,20 @@ function App() {
 
                               {workouts
                                   .filter((workout) => {
-                                      const search = historySearch.toLowerCase();
+                                      const search = historySearch.trim().toLowerCase();
 
-                                      return (
-                                          workout.name?.toLowerCase().includes(search) ||
-                                          workout.exercises?.some((exercise) =>
-                                              exercise.name?.toLowerCase().includes(search)
-                                          )
+                                      if (!search) {
+                                          return true;
+                                      }
+
+                                      const workoutName = (workout.name || "").toLowerCase();
+
+                                      const matchesExercise = (workout.exercises || []).some(
+                                          (exercise) =>
+                                              (exercise.name || "").toLowerCase().includes(search)
                                       );
+
+                                      return workoutName.includes(search) || matchesExercise;
                                   })
                                   .map((workout) => (
                                   <div className="workout-card" key={workout.id}>
