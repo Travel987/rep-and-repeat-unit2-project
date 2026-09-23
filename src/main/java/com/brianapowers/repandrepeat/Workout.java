@@ -4,6 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 public class Workout {
@@ -15,6 +22,9 @@ public class Workout {
     private int duration;
     private int moodBefore;
     private int moodAfter;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "workout_id")
+    private List<Exercise> exercises = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -62,5 +72,17 @@ public class Workout {
 
     public void setMoodAfter(int moodAfter) {
         this.moodAfter = moodAfter;
+    }
+
+    public List<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises.clear();
+
+        if (exercises != null) {
+            this.exercises.addAll(exercises);
+        }
     }
 }

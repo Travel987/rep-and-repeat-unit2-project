@@ -40,6 +40,7 @@ public class WorkoutController {
                     workout.setDuration(updatedWorkout.getDuration());
                     workout.setMoodBefore(updatedWorkout.getMoodBefore());
                     workout.setMoodAfter(updatedWorkout.getMoodAfter());
+                    workout.setExercises(updatedWorkout.getExercises());
 
                     return workoutRepository.save(workout);
 
