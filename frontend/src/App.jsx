@@ -13,6 +13,7 @@ import PageHeader from "./components/PageHeader";
 import AboutPage from "./components/AboutPage";
 
 function App() {
+    const [historySearch, setHistorySearch] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
     const [formError, setFormError] = useState("");
@@ -179,8 +180,8 @@ function App() {
                   setWorkouts([...workouts, savedWorkout]);
               }
               setName("");
-              setWorkoutType("");
-              setDuration("");
+              setWorkoutType("Strength");
+              setDuration("45");
               setMoodAfter("");
               setEditingId(null);
               setExercises([]);
@@ -498,9 +499,65 @@ function App() {
                       {activePage === "history" && (
                           <>
                               <h1>Look at you putting in WORK.</h1>
-                              <h2>Recent Workouts</h2>
+                              <div className="history-stats">
+                                  <div className="history-stat-card">
+                                      <span className="history-stat-number">{workouts.length}</span>
+                                      <span className="history-stat-label">workouts</span>
+                                  </div>
 
-                              {workouts.map((workout) => (
+                                  <div className="history-stat-card">
+
+    <span className="history-stat-number">
+      {workouts.reduce(
+          (total, workout) => total + (workout.duration || 0),
+          0
+      )}
+    </span>
+                                      <span className="history-stat-label">minutes trained</span>
+                                  </div>
+
+                                  <div className="history-stat-card">
+    <span className="history-stat-number">
+      {workouts.reduce(
+          (total, workout) =>
+              total +
+              (workout.exercises || []).reduce(
+                  (sum, exercise) =>
+                      sum +
+                      (exercise.weight || 0) *
+                      (exercise.sets || 0) *
+                      (exercise.reps || 0),
+                  0
+              ),
+          0
+      )}
+    </span>
+                                      <span className="history-stat-label">lbs lifted</span>
+                                  </div>
+                              </div>
+                              <div className="history-toolbar">
+                                  <h2>Recent Workouts</h2>
+
+                                  <input
+                                      type="text"
+                                      placeholder="Search workouts..."
+                                      value={historySearch}
+                                      onChange={(e) => setHistorySearch(e.target.value)}
+                                  />
+                              </div>
+
+                              {workouts
+                                  .filter((workout) => {
+                                      const search = historySearch.toLowerCase();
+
+                                      return (
+                                          workout.name?.toLowerCase().includes(search) ||
+                                          workout.exercises?.some((exercise) =>
+                                              exercise.name?.toLowerCase().includes(search)
+                                          )
+                                      );
+                                  })
+                                  .map((workout) => (
                                   <div className="workout-card" key={workout.id}>
                                       <h3>{workout.name}</h3>
                                       {workout.exercises?.map((exercise, index) => (
