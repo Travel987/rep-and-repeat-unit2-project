@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import MoodButton from "./components/MoodButton";
 import WorkoutCard from"./components/WorkoutCard";
 import ExerciseCard from "./components/ExerciseCard";
+import PageHeader from "./components/PageHeader";
 
 function App() {
     const navigate = useNavigate();
@@ -267,16 +268,14 @@ function App() {
           />
           <main className="main-content">
 
-              <div className="page-header">
-                  {activePage === "home" && (
-                      <>
-                          <p className="eyebrow">TONIGHT IS YOURS</p>
-                          <h1>Time to put in WORK.</h1>
-                          <p className="subtext">
-                              You showed up. Now go earn that stronger version of you.
-                          </p>
-                      </>
-                  )}
+              {activePage === "home" && (
+                  <PageHeader
+                      eyebrow="TONIGHT IS YOURS"
+                      title="Time to put in WORK."
+                      subtitle="You showed up. Now go earn that stronger version of you."
+                  />
+              )}
+
                   {activePage === "home" && (
                       <div className="home-dashboard">
 
@@ -334,7 +333,6 @@ function App() {
 
                       </div>
                   )}
-              </div>
               {activePage === "workouts" && (
                   <>
                       <div className="workouts-header">
