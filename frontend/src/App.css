@@ -722,11 +722,6 @@
     font-size: clamp(2rem, 3.4vw, 3rem);
     line-height: 1.05;
 }
-
-.about-hero-text h1 {
-    margin: 8px 0 14px;
-}
-
 .about-intro {
     line-height: 1.7;
     max-width: 700px;
