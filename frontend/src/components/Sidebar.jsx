@@ -40,6 +40,14 @@ function Sidebar({ activePage, setActivePage }) {
                 >
                     ♫ Music
                 </NavButton>
+
+                <NavButton
+                    page="about"
+                    activePage={activePage}
+                    setActivePage={setActivePage}
+                >
+                    👤 About
+                </NavButton>
             </nav>
         </aside>
     );

@@ -10,6 +10,7 @@ import MoodButton from "./components/MoodButton";
 import WorkoutCard from"./components/WorkoutCard";
 import ExerciseCard from "./components/ExerciseCard";
 import PageHeader from "./components/PageHeader";
+import AboutPage from "./components/AboutPage";
 
 function App() {
     const navigate = useNavigate();
@@ -333,6 +334,10 @@ function App() {
 
                       </div>
                   )}
+
+              {activePage === "about" && (
+                  <AboutPage />
+              )}
               {activePage === "workouts" && (
                   <>
                       <div className="workouts-header">
@@ -342,6 +347,7 @@ function App() {
                               Pick the moves. Set the challenge. Make it yours.
                           </p>
                       </div>
+
           <form className="workout-form" onSubmit={handleSubmit}>
               {formError && (
                   <p className="form-error">{formError}</p>
