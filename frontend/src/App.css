@@ -875,3 +875,33 @@
         width: 100%;
     }
 }
+.last-session-card {
+    width: 100%;
+    max-width: 420px;
+    margin: 18px auto 24px;
+    padding: 20px 24px;
+    text-align: center;
+    background: rgba(35, 50, 65, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+}
+
+.last-session-card h3 {
+    margin: 6px 0 10px;
+    font-size: 1.35rem;
+}
+
+.last-session-card p {
+    margin: 6px 0;
+}
+
+.last-session-mood {
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .last-session-card {
+        max-width: 100%;
+        padding: 18px;
+    }
+}

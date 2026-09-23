@@ -335,6 +335,24 @@ function App() {
 
                       </div>
                   )}
+              {workouts.length > 0 && (
+                  <div className="last-session-card">
+                      <p className="eyebrow">LAST SESSION</p>
+
+                      <h3>{workouts[workouts.length - 1].name}</h3>
+
+                      <p>
+                          {workouts[workouts.length - 1].exercises?.length || 0} exercises
+                          {" • "}
+                          {workouts[workouts.length - 1].duration || 0} min
+                      </p>
+
+                      <p className="last-session-mood">
+                          Mood after:{" "}
+                          {getMoodAfterEmoji(workouts[workouts.length - 1].moodAfter)}
+                      </p>
+                  </div>
+              )}
 
               {activePage === "home" && (
                   <div className="home-stats">
