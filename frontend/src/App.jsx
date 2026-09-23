@@ -11,8 +11,10 @@ import WorkoutCard from"./components/WorkoutCard";
 import ExerciseCard from "./components/ExerciseCard";
 import PageHeader from "./components/PageHeader";
 import AboutPage from "./components/AboutPage";
+import AuthPage from "./components/AuthPage";
 
 function App() {
+    const [loggedInUser, setLoggedInUser] = useState(null);
     const [historySearch, setHistorySearch] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
@@ -245,7 +247,10 @@ function App() {
         [...workouts].reverse().find((workout) => workout.exercise?.lenght > 0)
     || workouts[workouts.length - 1];
 
-  return (
+    if (!loggedInUser) {
+        return <AuthPage onLogin={setLoggedInUser} />;
+    }
+    return (
       <div className="app">
           {previewUrl && (
           <audio
