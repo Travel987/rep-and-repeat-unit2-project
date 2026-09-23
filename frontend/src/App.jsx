@@ -3,7 +3,11 @@ import "./App.css";
 import bicepCurlGif from "./assets/exercises/bicep-curl.gif";
 import shoulderPressGif from "./assets/exercises/shoulder-press.gif";
 import skullCrushersGif from "./assets/exercises/skull-crushers.gif";
-
+import Sidebar from "./components/Sidebar";
+import Footer from "./components/Footer";
+import MoodButton from "./components/MoodButton";
+import WorkoutCard from"./components/WorkoutCard";
+import ExerciseCard from "./components/ExerciseCard";
 
 function App() {
   const [workouts, setWorkouts] = useState([]);
@@ -202,18 +206,28 @@ function App() {
             });
     };
 
-    const getMoodEmoji = (mood) => {
-        const value = Number(mood);
-
+    const getMoodBeforeEmoji = (mood) => {
         const moods = {
-            1: "😫",
-            2: "😕",
+            1: "🫩",
+            2: "😩",
             3: "😐",
-            4: "🙂",
-            5: "😄"
+            4: "😊",
+            5: "🤪",
         };
 
-        return moods[value] || "—";
+        return moods[Number(mood)] || "—";
+    };
+
+    const getMoodAfterEmoji = (mood) => {
+        const moods = {
+            1: "😮‍💨",
+            2: "😅",
+            3: "🙂",
+            4: "💪🏽",
+            5: "🤩",
+        };
+
+        return moods[Number(mood)] || "—";
     };
 
     const todaysWorkout =
@@ -239,47 +253,10 @@ function App() {
               onEnded={() => setIsPlaying(false)}
           />
           )}
-
-          <aside className="sidebar">
-              <div className="logo">
-                  <span>REP</span>
-                  <small>& REPEAT</small>
-              </div>
-
-              <nav>
-                  <button
-                      type="button"
-                      className={`nav-item ${activePage === "home" ? "active" : ""}`}
-                      onClick={() => setActivePage("home")}
-                  >
-                      ⌂ Home
-                  </button>
-
-                  <button
-                      type="button"
-                      className={`nav-item ${activePage === "workouts" ? "active" : ""}`}
-                      onClick={() => setActivePage("workouts")}
-                  >
-                      ▣ Workouts
-                  </button>
-
-                  <button
-                      type="button"
-                      className={`nav-item ${activePage === "history" ? "active" : ""}`}
-                      onClick={() => setActivePage("history")}
-                  >
-                      ↻ History
-                  </button>
-
-                  <button
-                      type="button"
-                      className={`nav-item ${activePage === "music" ? "active" : ""}`}
-                      onClick={() => setActivePage("music")}
-                  >
-                      ♫ Music
-                  </button>
-              </nav>
-          </aside>
+          <Sidebar
+              activePage={activePage}
+              setActivePage={setActivePage}
+          />
           <main className="main-content">
 
               <div className="page-header">
@@ -295,84 +272,57 @@ function App() {
                   {activePage === "home" && (
                       <div className="home-dashboard">
 
-                          <div className="home-workout-card">
-                              <p className="eyebrow">TODAY'S WORKOUT</p>
-
-                              {workouts.length > 0 ? (
-                                  <>
-                                      <h2>{todaysWorkout.name}</h2>
-
-                                      <p>
-                                          {todaysWorkout.exercises?.length || 0}{" "}
-                                          {todaysWorkout.exercises?.length === 1 ? "exercise" : "exercises"}
-                                      </p>
-
-                                      <button
-                                          type="button"
-                                          onClick={() => setActivePage("workouts")}
-                                      >
-                                          START SESSION
-                                      </button>
-                                  </>
-                              ) : (
-                                  <>
-                                      <h2>No workout yet</h2>
-                                      <button
-                                          type="button"
-                                          onClick={() => setActivePage("workouts")}
-                                      >
-                                          BUILD WORKOUT
-                                      </button>
-                                  </>
-                              )}
-                          </div>
-
+                          <WorkoutCard
+                              workouts={workouts}
+                              todaysWorkout={todaysWorkout}
+                              onStart={() => setActivePage("workouts")}
+                          />
                           <div className="home-mood-card">
                               <h2>Set the mood</h2>
                               <p>How are you feeling?</p>
 
                               <div className="mood-picker">
-                                  <button
-                                      type="button"
-                                      className={moodBefore === "1" ? "selected-mood" : ""}
-                                      onClick={() => setMoodBefore("1")}
+                                  <MoodButton
+                                      mood="1"
+                                      selectedMood={moodBefore}
+                                      onSelect={setMoodBefore}
                                   >
-                                      😵‍💫
-                                  </button>
+                                      🫩
+                                  </MoodButton>
 
-                                  <button
-                                      type="button"
-                                      className={moodBefore === "2" ? "selected-mood" : ""}
-                                      onClick={() => setMoodBefore("2")}
+                                  <MoodButton
+                                      mood="2"
+                                      selectedMood={moodBefore}
+                                      onSelect={setMoodBefore}
                                   >
-                                      😩
-                                  </button>
+                                      😒
+                                  </MoodButton>
 
-                                  <button
-                                      type="button"
-                                      className={moodBefore === "3" ? "selected-mood" : ""}
-                                      onClick={() => setMoodBefore("3")}
+                                  <MoodButton
+                                      mood="3"
+                                      selectedMood={moodBefore}
+                                      onSelect={setMoodBefore}
                                   >
-                                      🙂
-                                  </button>
+                                      😐
+                                  </MoodButton>
 
-                                  <button
-                                      type="button"
-                                      className={moodBefore === "4" ? "selected-mood" : ""}
-                                      onClick={() => setMoodBefore("4")}
+                                  <MoodButton
+                                      mood="4"
+                                      selectedMood={moodBefore}
+                                      onSelect={setMoodBefore}
                                   >
-                                      😤
-                                  </button>
+                                      😊
+                                  </MoodButton>
 
-                                  <button
-                                      type="button"
-                                      className={moodBefore === "5" ? "selected-mood" : ""}
-                                      onClick={() => setMoodBefore("5")}
+                                  <MoodButton
+                                      mood="5"
+                                      selectedMood={moodBefore}
+                                      onSelect={setMoodBefore}
                                   >
-                                      🔥
-                                  </button>
+                                      🤪
+                                  </MoodButton>
                               </div>
-                          </div>
+                              </div>
 
                       </div>
                   )}
@@ -434,80 +384,60 @@ function App() {
                   <h2>Exercise queue</h2>
               {exercises.length > 0 && (
                   <div className="exercise-list">
-
                       {exercises.map((exercise, index) => (
-                          <div className={`exercise-item exercise-card-${index % 3}`} key={index}>
-
-                              <div className="exercise-thumbnail">
-                                  {exerciseImages[exercise.name.toLowerCase()] ? (
-                                      <img
-                                          src={exerciseImages[exercise.name.toLowerCase()]}
-                                          alt={`${exercise.name} demonstration`}
-                                      />
-                                  ) : (
-                                      <span>🏋️</span>
-                                  )}
-                              </div>
-                              <div className="exercise-info">
-                                  <strong>{exercise.name}</strong>
-
-                                  <span>
-                {exercise.sets} × {exercise.reps} • {exercise.weight} lbs
-            </span>
-                              </div>
-
-                              <div className="exercise-number">
-                                  {String(index + 1).padStart(2, "0")}
-                              </div>
-
-                          </div>
+                      <ExerciseCard
+                          key={index}
+                          exercise={exercise}
+                          index={index}
+                          imageSrc={exerciseImages[exercise.name.toLowerCase()]}
+                      />
                       ))}
-                  </div>
+              </div>
               )}
               </div>
               <div className="mood-section">
                   <span>Mood After</span>
                   <div className="mood-picker">
-                  <button
-                      type="button"
-                      className={moodAfter === "1" ? "selected-mood" : ""}
-                      onClick={() => setMoodAfter("1")}
-                  >
-                      😵‍💫
-                  </button>
+                      <MoodButton
+                          mood="1"
+                          selectedMood={moodAfter}
+                          onSelect={setMoodAfter}
+                      >
+                          😮‍💨
+                      </MoodButton>
 
-                  <button
-                      type="button"
-                      className={moodAfter === "2" ? "selected-mood" : ""}
-                      onClick={() => setMoodAfter("2")}
-                  >
-                      😮‍💨
-                  </button>
+                      <MoodButton
+                          mood="2"
+                          selectedMood={moodAfter}
+                          onSelect={setMoodAfter}
+                      >
+                          😅
+                      </MoodButton>
 
-                  <button
-                      type="button"
-                      className={moodAfter === "3" ? "selected-mood" : ""}
-                      onClick={() => setMoodAfter("3")}
-                  >
-                      🙂
-                  </button>
+                      <MoodButton
+                          mood="3"
+                          selectedMood={moodAfter}
+                          onSelect={setMoodAfter}
+                      >
+                          🙃
+                      </MoodButton>
 
-                  <button
-                      type="button"
-                      className={moodAfter === "4" ? "selected-mood" : ""}
-                      onClick={() => setMoodAfter("4")}
-                  >
-                      💪
-                  </button>
+                      <MoodButton
+                          mood="4"
+                          selectedMood={moodAfter}
+                          onSelect={setMoodAfter}
+                      >
+                          💪🏽
+                      </MoodButton>
 
-                  <button
-                      type="button"
-                      className={moodAfter === "5" ? "selected-mood" : ""}
-                      onClick={() => setMoodAfter("5")}
-                  >
-                      🤩
-                  </button>
-              </div>
+                      <MoodButton
+                          mood="5"
+                          selectedMood={moodAfter}
+                          onSelect={setMoodAfter}
+                      >
+                          🤩
+                      </MoodButton>
+                  </div>
               </div>
               <button type="submit">
                   Log Workout
@@ -528,8 +458,8 @@ function App() {
                                               {exercise.name} — {exercise.sets} × {exercise.reps} • {exercise.weight} lbs
                                           </p>
                                       ))}
-                                      <p>Mood Before: {getMoodEmoji(workout.moodBefore)}</p>
-                                      <p>Mood After: {getMoodEmoji(workout.moodAfter)}</p>
+                                      <p>Mood Before: {getMoodBeforeEmoji(workout.moodBefore)}</p>
+                                      <p>Mood After: {getMoodAfterEmoji(workout.moodAfter)}</p>
 
                                       <button onClick={() => handleEdit(workout)}>Edit</button>
                                       <button onClick={() => handleDelete(workout.id)}>Delete</button>
@@ -656,6 +586,7 @@ function App() {
                       </div>
                   </div>
               )}
+              <Footer/>
           </main>
           </div>
           );
