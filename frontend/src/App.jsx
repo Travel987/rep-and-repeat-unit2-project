@@ -108,7 +108,7 @@ function App() {
                 console.error("Music preview error:", error);
                 setPreviewUrl("");
             });
-    }, [selectedVibe]);
+    }, [selectedVibe, currentSong.artist, currentSong.title]);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/workouts")
