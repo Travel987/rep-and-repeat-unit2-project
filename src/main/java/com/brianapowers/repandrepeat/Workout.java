@@ -70,12 +70,19 @@ public class Workout {
         return moodAfter;
     }
 
-    public void setMoodAfter(int moodAfter) {this.moodAfter = moodAfter;}
+    public void setMoodAfter(int moodAfter) {
+        this.moodAfter = moodAfter;
+    }
 
     public List<Exercise> getExercises() {
         return exercises;
     }
+
     public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
+        this.exercises.clear();
+
+        if (exercises != null) {
+            this.exercises.addAll(exercises);
+        }
     }
 }

@@ -127,8 +127,8 @@ function App() {
 
   const handleSubmit = (e) => {
       e.preventDefault();
-      if ( !moodBefore || !moodAfter) {
-          alert("Please select both Mood Before and Mood After.");
+      if (!moodAfter) {
+          alert("Please select Mood After.");
           return;
       }
 
@@ -167,7 +167,6 @@ function App() {
               setName("");
               setWorkoutType("");
               setDuration("");
-              setMoodBefore("");
               setMoodAfter("");
               setEditingId(null);
               setExercises([]);
@@ -223,6 +222,24 @@ function App() {
 
   return (
       <div className="app">
+          {previewUrl && (
+          <audio
+              ref={audioRef}
+              key={previewUrl}
+              src={previewUrl}
+              preload="metadata"
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
+              onTimeUpdate={(event) =>
+                  setCurrentTime(event.currentTarget.currentTime)
+              }
+              onLoadedMetadata={(event) =>
+                  setAudioDuration(event.currentTarget.duration)
+              }
+              onEnded={() => setIsPlaying(false)}
+          />
+          )}
+
           <aside className="sidebar">
               <div className="logo">
                   <span>REP</span>
@@ -270,84 +287,94 @@ function App() {
                       <>
                           <p className="eyebrow">TONIGHT IS YOURS</p>
                           <h1>Time to put in WORK.</h1>
+                          <p className="subtext">
+                              You showed up. Now go earn that stronger version of you.
+                          </p>
                       </>
                   )}
                   {activePage === "home" && (
                       <div className="home-dashboard">
-                          <h2>Set the mood</h2>
-                          <p>How are you feeling?</p>
 
-                          <div className="mood-picker">
-                              <button
-                                  type="button"
-                                  className={moodBefore === "1" ? "selected-mood" : ""}
-                                  onClick={() => setMoodBefore("1")}
-                              >
-                                  🥱
-                              </button>
+                          <div className="home-workout-card">
+                              <p className="eyebrow">TODAY'S WORKOUT</p>
 
-                              <button
-                                  type="button"
-                                  className={moodBefore === "2" ? "selected-mood" : ""}
-                                  onClick={() => setMoodBefore("2")}
-                              >
-                                  😩
-                              </button>
+                              {workouts.length > 0 ? (
+                                  <>
+                                      <h2>{todaysWorkout.name}</h2>
 
-                              <button
-                                  type="button"
-                                  className={moodBefore === "3" ? "selected-mood" : ""}
-                                  onClick={() => setMoodBefore("3")}
-                              >
-                                  😐
-                              </button>
+                                      <p>
+                                          {todaysWorkout.exercises?.length || 0}{" "}
+                                          {todaysWorkout.exercises?.length === 1 ? "exercise" : "exercises"}
+                                      </p>
 
-                              <button
-                                  type="button"
-                                  className={moodBefore === "4" ? "selected-mood" : ""}
-                                  onClick={() => setMoodBefore("4")}
-                              >
-                                  😤
-                              </button>
-
-                              <button
-                                  type="button"
-                                  className={moodBefore === "5" ? "selected-mood" : ""}
-                                  onClick={() => setMoodBefore("5")}
-                              >
-                                  🔥
-                              </button>
-
+                                      <button
+                                          type="button"
+                                          onClick={() => setActivePage("workouts")}
+                                      >
+                                          START SESSION
+                                      </button>
+                                  </>
+                              ) : (
+                                  <>
+                                      <h2>No workout yet</h2>
+                                      <button
+                                          type="button"
+                                          onClick={() => setActivePage("workouts")}
+                                      >
+                                          BUILD WORKOUT
+                                      </button>
+                                  </>
+                              )}
                           </div>
 
-                          {workouts.length > 0 && (
-                              <div className="home-workout-card">
-                                  <p>TODAY'S WORKOUT</p>
+                          <div className="home-mood-card">
+                              <h2>Set the mood</h2>
+                              <p>How are you feeling?</p>
 
-                                  <h2>{todaysWorkout.name}</h2>
-
-                                  <p>
-                                      {todaysWorkout.exercises?.length || 0}{" "}
-                                      {todaysWorkout.exercises?.length === 1 ? "exercise" : "exercises"}
-                                      {" • "}
-                                      {todaysWorkout.duration} min
-                                  </p>
+                              <div className="mood-picker">
+                                  <button
+                                      type="button"
+                                      className={moodBefore === "1" ? "selected-mood" : ""}
+                                      onClick={() => setMoodBefore("1")}
+                                  >
+                                      😵‍💫
+                                  </button>
 
                                   <button
                                       type="button"
-                                      onClick={() => setActivePage("workouts")}
+                                      className={moodBefore === "2" ? "selected-mood" : ""}
+                                      onClick={() => setMoodBefore("2")}
                                   >
-                                      START SESSION
+                                      😩
+                                  </button>
+
+                                  <button
+                                      type="button"
+                                      className={moodBefore === "3" ? "selected-mood" : ""}
+                                      onClick={() => setMoodBefore("3")}
+                                  >
+                                      🙂
+                                  </button>
+
+                                  <button
+                                      type="button"
+                                      className={moodBefore === "4" ? "selected-mood" : ""}
+                                      onClick={() => setMoodBefore("4")}
+                                  >
+                                      😤
+                                  </button>
+
+                                  <button
+                                      type="button"
+                                      className={moodBefore === "5" ? "selected-mood" : ""}
+                                      onClick={() => setMoodBefore("5")}
+                                  >
+                                      🔥
                                   </button>
                               </div>
-                          )}
+                          </div>
 
                       </div>
-                      )}
-                  {activePage === "home" && (
-                      <p className="subtext">
-                          You showed up. Now go earn that stronger version of you.
-                      </p>
                   )}
               </div>
               {activePage === "workouts" && (
@@ -439,43 +466,6 @@ function App() {
               )}
               </div>
               <div className="mood-section">
-                  <span>Mood Before</span>
-                  <div className="mood-picker">
-
-                  <button type="button"
-                          className={moodBefore === "1" ? "selected-mood" : ""}
-                          onClick={() => setMoodBefore("1")}
-                  >🥱
-                  </button>
-                  <button type="button"
-                          className={moodBefore === "2" ? "selected-mood" : ""}
-                          onClick={() => setMoodBefore("2")}
-                  >😩
-                  </button>
-                  <button type="button"
-                          className={moodBefore === "3" ? "selected-mood" : ""}
-                          onClick={() => setMoodBefore("3")}
-                  >😐
-                  </button>
-                      <button
-                          type="button"
-                          className={moodBefore === "4" ? "selected-mood" : ""}
-                          onClick={() => setMoodBefore("4")}
-                      >
-                          😤
-                      </button>
-
-                      <button
-                          type="button"
-                          className={moodBefore === "5" ? "selected-mood" : ""}
-                          onClick={() => setMoodBefore("5")}
-                      >
-                          🔥
-                      </button>
-
-                  </div>
-              </div>
-              <div className="mood-section">
                   <span>Mood After</span>
                   <div className="mood-picker">
                   <button
@@ -533,8 +523,11 @@ function App() {
                               {workouts.map((workout) => (
                                   <div className="workout-card" key={workout.id}>
                                       <h3>{workout.name}</h3>
-                                      <p>Type: {workout.workoutType}</p>
-                                      <p>Duration: {workout.duration} minutes</p>
+                                      {workout.exercises?.map((exercise, index) => (
+                                          <p key={index}>
+                                              {exercise.name} — {exercise.sets} × {exercise.reps} • {exercise.weight} lbs
+                                          </p>
+                                      ))}
                                       <p>Mood Before: {getMoodEmoji(workout.moodBefore)}</p>
                                       <p>Mood After: {getMoodEmoji(workout.moodAfter)}</p>
 
@@ -623,22 +616,6 @@ function App() {
 
                               {previewUrl ? (
                                           <>
-                                              <audio
-                                                  ref={audioRef}
-                                                  key={previewUrl}
-                                                  src={previewUrl}
-                                                  preload="metadata"
-                                                  onPlay={() => setIsPlaying(true)}
-                                                  onPause={() => setIsPlaying(false)}
-                                                  onTimeUpdate={(event) =>
-                                                      setCurrentTime(event.currentTarget.currentTime)
-                                                  }
-                                                  onLoadedMetadata={(event) =>
-                                                      setAudioDuration(event.currentTarget.duration)
-                                                  }
-                                                  onEnded={() => setIsPlaying(false)}
-                                              />
-
                                               <div className="custom-player">
                                                   <button
                                                       type="button"

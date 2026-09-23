@@ -542,3 +542,139 @@
     width: 100%;
     box-sizing: border-box;
 }
+.home-dashboard {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+    margin-top: 28px;
+}
+
+.home-workout-card,
+.home-mood-card {
+    border-radius: 18px;
+    padding: 28px;
+}
+
+.home-mood-card .mood-picker {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+@media (max-width: 850px) {
+    .home-dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+.home-workout-card,
+.home-mood-card {
+    border-radius: 18px;
+    padding: 28px;
+}
+.home-workout-card,
+.home-mood-card {
+    background: rgba(90, 110, 130, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    padding: 28px;
+    min-height: 190px;
+}
+@media (max-width: 600px) {
+    .app {
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        position: static;
+        padding: 16px;
+    }
+
+    .sidebar nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .sidebar nav button {
+        width: 100%;
+        min-width: 0;
+        padding: 10px 6px;
+    }
+
+    .main-content {
+        width: 100%;
+        padding: 24px 18px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        line-height: 1.05;
+    }
+
+    .home-dashboard {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .home-workout-card,
+    .home-mood-card {
+        width: 100%;
+        min-height: auto;
+        padding: 20px;
+    }
+
+    .mood-picker {
+        flex-wrap: wrap;
+    }
+.workout-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.session-panel,
+.queue-panel {
+    width: 100%;
+    min-width: 0;
+}
+
+.queue-panel {
+    min-height: 160px;
+}
+    .mood-picker {
+        flex-wrap: wrap;
+    }
+
+    .workout-form {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .session-panel,
+    .queue-panel {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .queue-panel {
+        min-height: 160px;
+    }
+
+    .session-panel input[type="number"] {
+        font-size: 10px;
+        padding: 10px 3px;
+        min-width: 0;
+    }
+    .main-content > h1 {
+        font-size: 2rem;
+        line-height: 1.1;
+        text-align: center;
+        margin-bottom: 12px;
+    }
+}
