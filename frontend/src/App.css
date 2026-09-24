@@ -588,6 +588,31 @@ button:hover {
     padding: 28px;
     min-height: 190px;
 }
+
+.home-workout-card,
+.home-mood-card,
+.home-stat-card,
+.last-session-card,
+.session-panel,
+.queue-panel,
+.workout-card,
+.music-panel,
+.about-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-workout-card:hover,
+.home-mood-card:hover,
+.home-stat-card:hover,
+.last-session-card:hover,
+.session-panel:hover,
+.queue-panel:hover,
+.workout-card:hover,
+.music-panel:hover,
+.about-card:hover {
+    transform: translateY(-3px);
+}
+
 @media (max-width: 600px) {
     .app {
         flex-direction: column;
