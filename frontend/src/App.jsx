@@ -94,6 +94,7 @@ function App() {
 
         return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     };
+    // Fecthes the current workout song preview from the iTunes Search API.
     useEffect(() => {
         const searchTerm = encodeURIComponent(
             `${currentSong.artist} ${currentSong.title}`
@@ -115,6 +116,7 @@ function App() {
             });
     }, [selectedVibe, currentSong.artist, currentSong.title]);
 
+    // Load saved workouts from the Spring Boot API when the app starts.
   useEffect(() => {
     fetch("http://localhost:8080/api/workouts")
         .then((response) => response.json())
@@ -146,7 +148,7 @@ function App() {
     const handleLogout = () => {
         setLoggedInUser(null);
     };
-
+// Create a new workout or updates an existing workout.
   const handleSubmit = (e) => {
       e.preventDefault();
       if (!moodAfter) {
