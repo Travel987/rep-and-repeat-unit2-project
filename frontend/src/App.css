@@ -167,19 +167,30 @@
     align-items: center;
     justify-content: center;
 }
+.mood-picker button.selected-mood {
+    background: #b7ff3c;
+    border-color: #b7ff3c;
+    transform: scale(1.08);
+}
 
 .mood-picker button {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
     background: #263b4d;
     color: white;
     border: 1px solid #526779;
     border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 22px;
     cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.mood-picker button.selected-mood {
-    background: #b7ff3c;
-    border-color: #b7ff3c;
+
+.mood-picker button:hover {
+    transform: scale(1.08);
 }
 .mood-section span {
     display: block;
@@ -360,6 +371,14 @@
     background: #dfff00;
     color: #111;
     cursor: pointer;
+}
+
+button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
 }
 
 .player-time {
@@ -580,6 +599,47 @@
     padding: 28px;
     min-height: 190px;
 }
+
+.home-workout-card,
+.home-mood-card,
+.home-stat-card,
+.last-session-card,
+.session-panel,
+.queue-panel,
+.workout-card,
+.music-panel,
+.about-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-workout-card:hover,
+.home-mood-card:hover,
+.home-stat-card:hover,
+.last-session-card:hover,
+.session-panel:hover,
+.queue-panel:hover,
+.workout-card:hover,
+.music-panel:hover,
+.about-card:hover {
+    transform: translateY(-3px);
+}
+
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-content {
+    animation: pageFadeIn 0.35s ease;
+}
+
 @media (max-width: 600px) {
     .app {
         flex-direction: column;
@@ -604,6 +664,24 @@
         width: 100%;
         min-width: 0;
         padding: 10px 6px;
+    }
+
+    @keyframes softPulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.02);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .sidebar nav button.active {
+        animation: softPulse 1.8s ease-in-out infinite;
     }
 
     .main-content {
@@ -684,4 +762,314 @@
     text-align: center;
     font-size: 0.8rem;
     opacity: 0.65;
+}
+.form-error {
+    grid-column: 1 / -1;
+    color: #ffb3b3;
+    font-weight: 600;
+    margin: 0 0 8px;
+    text-align: center;
+}
+.about-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.about-hero {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 28px;
+    align-items: center;
+    padding: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    background: rgba(35, 50, 65, 0.35);
+}
+
+.about-photo {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 22px;
+    border: 2px solid rgba(200, 255, 0, 0.65);
+}
+
+.about-hero-text h1 {
+    margin: 8px 0 14px;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.05;
+}
+.about-intro {
+    line-height: 1.7;
+    max-width: 700px;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.about-card {
+    padding: 22px;
+    border-radius: 18px;
+    background: rgba(45, 60, 75, 0.32);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.about-card h2 {
+    margin-top: 0;
+}
+
+@media (max-width: 850px) {
+    .about-hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .about-photo {
+        margin: 0 auto;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .about-photo {
+        width: 170px;
+        height: 170px;
+    }
+
+    .about-hero {
+        padding: 20px;
+    }
+}
+.home-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 22px;
+}
+
+.home-stat-card {
+    background: rgba(35, 50, 65, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+}
+
+.home-stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.home-stat-label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+@media (max-width: 600px) {
+    .home-stats {
+        grid-template-columns: 1fr;
+    }
+}
+.history-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin: 24px 0 28px;
+}
+
+.history-stat-card {
+    background: rgba(35, 50, 65, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+}
+
+.history-stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.history-stat-label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+@media (max-width: 600px) {
+    .history-stats {
+        grid-template-columns: 1fr;
+    }
+}
+.history-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin: 8px 0 24px;
+}
+
+.history-toolbar h2 {
+    margin: 0;
+}
+
+.history-toolbar input {
+    width: 260px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(35, 50, 65, 0.5);
+    color: white;
+    outline: none;
+}
+
+.history-toolbar input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.history-toolbar input:focus {
+    border-color: rgba(210, 255, 0, 0.75);
+}
+
+@media (max-width: 600px) {
+    .history-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .history-toolbar input {
+        width: 100%;
+    }
+}
+.last-session-card {
+    width: 100%;
+    max-width: 420px;
+    margin: 18px auto 24px;
+    padding: 20px 24px;
+    text-align: center;
+    background: rgba(35, 50, 65, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+}
+
+.last-session-card h3 {
+    margin: 6px 0 10px;
+    font-size: 1.35rem;
+}
+
+.last-session-card p {
+    margin: 6px 0;
+}
+
+.last-session-mood {
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .last-session-card {
+        max-width: 100%;
+        padding: 18px;
+    }
+}
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #111820;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    padding: 42px;
+    background: rgba(35, 50, 65, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 24px;
+    text-align: center;
+}
+
+.auth-card h1 {
+      margin: 10px 0;
+      font-size: clamp(2.3rem, 5vw, 3.5rem);
+      line-height: 1;
+}
+
+.auth-subtitle {
+    margin-bottom: 28px;
+    opacity: 0.8;
+}
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: left;
+}
+
+.auth-card label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.auth-card input {
+    width: 100%;
+    adding: 14px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    background: #243442;
+    color: white;
+    font-size: 1rem;
+}
+
+.auth-card input:focus {
+    outline: 2px solid #c8ff00;
+    border-color: #c8ff00;
+}
+
+.auth-submit {
+    width: 100%;
+    padding: 14px;
+    margin-top: 4px;
+    border: none;
+    border-radius: 12px;
+    background: #c8ff00;
+    color: #111820;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.auth-switch {
+    margin-top: 20px;
+    border: none;
+    background: transparent;
+    color: #c8ff00;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.auth-message {
+    margin: 0;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .auth-card {
+        padding: 28px 20px;
+        }
 }

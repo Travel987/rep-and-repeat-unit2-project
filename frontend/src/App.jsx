@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import bicepCurlGif from "./assets/exercises/bicep-curl.gif";
@@ -8,8 +9,16 @@ import Footer from "./components/Footer";
 import MoodButton from "./components/MoodButton";
 import WorkoutCard from"./components/WorkoutCard";
 import ExerciseCard from "./components/ExerciseCard";
+import PageHeader from "./components/PageHeader";
+import AboutPage from "./components/AboutPage";
+import AuthPage from "./components/AuthPage";
 
 function App() {
+    const [loggedInUser, setLoggedInUser] = useState(null);
+    const [historySearch, setHistorySearch] = useState("");
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [formError, setFormError] = useState("");
   const [workouts, setWorkouts] = useState([]);
   const [name, setName] = useState("");
   const [workoutType, setWorkoutType] = useState("Strength");
@@ -22,7 +31,11 @@ function App() {
   const [exerciseReps, setExerciseReps] = useState("");
   const [exerciseWeight, setExerciseWeight] = useState("");
   const [exercises, setExercises] = useState([]);
-  const [activePage, setActivePage] = useState("home");
+    const activePage =
+        location.pathname === "/" ? "home" : location.pathname.slice(1);
+    const setActivePage = (page) => {
+        navigate(page === "home" ? "/" : `/${page}`);
+    };
   const [selectedVibe, setSelectedVibe] = useState("locked");
   const [mixSelected, setMixSelected] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
@@ -31,6 +44,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
+
 
 
     const exerciseImages = {
@@ -80,6 +94,7 @@ function App() {
 
         return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     };
+    // Fecthes the current workout song preview from the iTunes Search API.
     useEffect(() => {
         const searchTerm = encodeURIComponent(
             `${currentSong.artist} ${currentSong.title}`
@@ -99,8 +114,9 @@ function App() {
                 console.error("Music preview error:", error);
                 setPreviewUrl("");
             });
-    }, [selectedVibe]);
+    }, [selectedVibe, currentSong.artist, currentSong.title]);
 
+    // Load saved workouts from the Spring Boot API when the app starts.
   useEffect(() => {
     fetch("http://localhost:8080/api/workouts")
         .then((response) => response.json())
@@ -110,7 +126,7 @@ function App() {
 
     const handleAddExercise = () => {
         if (!exerciseName || !exerciseSets || !exerciseReps || !exerciseWeight) {
-            alert("Please complete all exercise fields.");
+            setFormError("Please complete all exercise fields.");
             return;
         }
 
@@ -129,10 +145,14 @@ function App() {
         setExerciseWeight("");
     };
 
+    const handleLogout = () => {
+        setLoggedInUser(null);
+    };
+// Create a new workout or updates an existing workout.
   const handleSubmit = (e) => {
       e.preventDefault();
       if (!moodAfter) {
-          alert("Please select Mood After.");
+          setFormError("Please select Mood After.");
           return;
       }
 
@@ -169,8 +189,8 @@ function App() {
                   setWorkouts([...workouts, savedWorkout]);
               }
               setName("");
-              setWorkoutType("");
-              setDuration("");
+              setWorkoutType("Strength");
+              setDuration("45");
               setMoodAfter("");
               setEditingId(null);
               setExercises([]);
@@ -234,7 +254,10 @@ function App() {
         [...workouts].reverse().find((workout) => workout.exercise?.lenght > 0)
     || workouts[workouts.length - 1];
 
-  return (
+    if (!loggedInUser) {
+        return <AuthPage onLogin={setLoggedInUser} />;
+    }
+    return (
       <div className="app">
           {previewUrl && (
           <audio
@@ -256,19 +279,18 @@ function App() {
           <Sidebar
               activePage={activePage}
               setActivePage={setActivePage}
+              onLogout={handleLogout}
           />
           <main className="main-content">
 
-              <div className="page-header">
-                  {activePage === "home" && (
-                      <>
-                          <p className="eyebrow">TONIGHT IS YOURS</p>
-                          <h1>Time to put in WORK.</h1>
-                          <p className="subtext">
-                              You showed up. Now go earn that stronger version of you.
-                          </p>
-                      </>
-                  )}
+              {activePage === "home" && (
+                  <PageHeader
+                      eyebrow="TONIGHT IS YOURS"
+                      title="Time to put in WORK."
+                      subtitle="You showed up. Now go earn that stronger version of you."
+                  />
+              )}
+
                   {activePage === "home" && (
                       <div className="home-dashboard">
 
@@ -326,7 +348,62 @@ function App() {
 
                       </div>
                   )}
-              </div>
+              {activePage === "home" && (
+                  <div className="home-stats">
+                      <div className="home-stat-card">
+                          <span className="home-stat-number">{workouts.length}</span>
+                          <span className="home-stat-label">workouts</span>
+                      </div>
+
+                      <div className="home-stat-card">
+      <span className="home-stat-number">
+        {workouts.reduce((total, workout) => total + (workout.duration || 0), 0)}
+      </span>
+                          <span className="home-stat-label">minutes trained</span>
+                      </div>
+
+                      <div className="home-stat-card">
+      <span className="home-stat-number">
+        {workouts.reduce(
+            (total, workout) =>
+                total +
+                (workout.exercises || []).reduce(
+                    (sum, exercise) =>
+                        sum +
+                        (exercise.weight || 0) *
+                        (exercise.sets || 0) *
+                        (exercise.reps || 0),
+                    0
+                ),
+            0
+        )}
+      </span>
+                          <span className="home-stat-label">lbs lifted</span>
+                      </div>
+                  </div>
+              )}
+              {activePage === "home" && workouts.length > 0 && (
+                  <div className="last-session-card">
+                      <p className="eyebrow">LAST SESSION</p>
+
+                      <h3>{workouts[workouts.length - 1].name}</h3>
+
+                      <p>
+                          {workouts[workouts.length - 1].exercises?.length || 0} exercises
+                          {" • "}
+                          {workouts[workouts.length - 1].duration || 0} min
+                      </p>
+
+                      <p className="last-session-mood">
+                          Mood after:{" "}
+                          {getMoodAfterEmoji(workouts[workouts.length - 1].moodAfter)}
+                      </p>
+                  </div>
+              )}
+
+              {activePage === "about" && (
+                  <AboutPage />
+              )}
               {activePage === "workouts" && (
                   <>
                       <div className="workouts-header">
@@ -336,7 +413,11 @@ function App() {
                               Pick the moves. Set the challenge. Make it yours.
                           </p>
                       </div>
+
           <form className="workout-form" onSubmit={handleSubmit}>
+              {formError && (
+                  <p className="form-error">{formError}</p>
+              )}
 
               <div className="session-panel">
                   <h2>Session details</h2>
@@ -448,9 +529,71 @@ function App() {
                       {activePage === "history" && (
                           <>
                               <h1>Look at you putting in WORK.</h1>
-                              <h2>Recent Workouts</h2>
+                              <div className="history-stats">
+                                  <div className="history-stat-card">
+                                      <span className="history-stat-number">{workouts.length}</span>
+                                      <span className="history-stat-label">workouts</span>
+                                  </div>
 
-                              {workouts.map((workout) => (
+                                  <div className="history-stat-card">
+
+    <span className="history-stat-number">
+      {workouts.reduce(
+          (total, workout) => total + (workout.duration || 0),
+          0
+      )}
+    </span>
+                                      <span className="history-stat-label">minutes trained</span>
+                                  </div>
+
+                                  <div className="history-stat-card">
+    <span className="history-stat-number">
+      {workouts.reduce(
+          (total, workout) =>
+              total +
+              (workout.exercises || []).reduce(
+                  (sum, exercise) =>
+                      sum +
+                      (exercise.weight || 0) *
+                      (exercise.sets || 0) *
+                      (exercise.reps || 0),
+                  0
+              ),
+          0
+      )}
+    </span>
+                                      <span className="history-stat-label">lbs lifted</span>
+                                  </div>
+                              </div>
+                              <div className="history-toolbar">
+                                  <h2>Recent Workouts</h2>
+
+                                  <input
+                                      type="text"
+                                      placeholder="Search workouts..."
+                                      value={historySearch}
+                                      onChange={(e) => setHistorySearch(e.target.value)}
+                                  />
+                              </div>
+
+                              {workouts
+                                  .filter((workout) => {
+                                      const search = historySearch.trim().toLowerCase();
+
+                                      if (!search) {
+                                          return true;
+                                      }
+
+                                      const workoutName = (workout.name || "").toLowerCase();
+
+                                      const matchesExercise = (workout.exercises || []).some(
+                                          (exercise) =>
+                                              (exercise.name || "").toLowerCase().includes(search)
+                                      );
+
+                                      return workoutName.includes(search) || matchesExercise;
+                                  })
+                                  .map((workout) => (
                                   <div className="workout-card" key={workout.id}>
                                       <h3>{workout.name}</h3>
                                       {workout.exercises?.map((exercise, index) => (
