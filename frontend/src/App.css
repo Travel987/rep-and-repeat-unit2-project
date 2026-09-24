@@ -606,6 +606,24 @@
         padding: 10px 6px;
     }
 
+    @keyframes softPulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.02);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .sidebar nav button.active {
+        animation: softPulse 1.8s ease-in-out infinite;
+    }
+
     .main-content {
         width: 100%;
         padding: 24px 18px;
