@@ -1,6 +1,6 @@
 import NavButton from "./NavButton";
 
-function Sidebar({ activePage, setActivePage }) {
+function Sidebar({ activePage, setActivePage, onLogout }) {
     return (
         <aside className="sidebar">
             <div className="logo">
@@ -14,7 +14,7 @@ function Sidebar({ activePage, setActivePage }) {
                     activePage={activePage}
                     setActivePage={setActivePage}
                 >
-                    ⌂ Home
+                    🏡 Home
                 </NavButton>
 
                 <NavButton
@@ -22,7 +22,7 @@ function Sidebar({ activePage, setActivePage }) {
                     activePage={activePage}
                     setActivePage={setActivePage}
                 >
-                    ▣ Workouts
+                    🏋🏽‍♂️ Workouts
                 </NavButton>
 
                 <NavButton
@@ -30,7 +30,7 @@ function Sidebar({ activePage, setActivePage }) {
                     activePage={activePage}
                     setActivePage={setActivePage}
                 >
-                    ◷ History
+                    🕒 History
                 </NavButton>
 
                 <NavButton
@@ -38,7 +38,7 @@ function Sidebar({ activePage, setActivePage }) {
                     activePage={activePage}
                     setActivePage={setActivePage}
                 >
-                    ♫ Music
+                    🎵 Music
                 </NavButton>
 
                 <NavButton
@@ -48,6 +48,9 @@ function Sidebar({ activePage, setActivePage }) {
                 >
                     👤 About
                 </NavButton>
+                <button type="button" onClick={onLogout}>
+                    🔚 Logout
+                </button>
             </nav>
         </aside>
     );

@@ -46,6 +46,7 @@ function App() {
   const [audioDuration, setAudioDuration] = useState(0);
 
 
+
     const exerciseImages = {
         "bicep curl": bicepCurlGif,
         "shoulder press": shoulderPressGif,
@@ -140,6 +141,10 @@ function App() {
         setExerciseSets("");
         setExerciseReps("");
         setExerciseWeight("");
+    };
+
+    const handleLogout = () => {
+        setLoggedInUser(null);
     };
 
   const handleSubmit = (e) => {
@@ -272,6 +277,7 @@ function App() {
           <Sidebar
               activePage={activePage}
               setActivePage={setActivePage}
+              onLogout={handleLogout}
           />
           <main className="main-content">
 
@@ -340,25 +346,6 @@ function App() {
 
                       </div>
                   )}
-              {workouts.length > 0 && (
-                  <div className="last-session-card">
-                      <p className="eyebrow">LAST SESSION</p>
-
-                      <h3>{workouts[workouts.length - 1].name}</h3>
-
-                      <p>
-                          {workouts[workouts.length - 1].exercises?.length || 0} exercises
-                          {" • "}
-                          {workouts[workouts.length - 1].duration || 0} min
-                      </p>
-
-                      <p className="last-session-mood">
-                          Mood after:{" "}
-                          {getMoodAfterEmoji(workouts[workouts.length - 1].moodAfter)}
-                      </p>
-                  </div>
-              )}
-
               {activePage === "home" && (
                   <div className="home-stats">
                       <div className="home-stat-card">
@@ -391,6 +378,24 @@ function App() {
       </span>
                           <span className="home-stat-label">lbs lifted</span>
                       </div>
+                  </div>
+              )}
+              {activePage === "home" && workouts.length > 0 && (
+                  <div className="last-session-card">
+                      <p className="eyebrow">LAST SESSION</p>
+
+                      <h3>{workouts[workouts.length - 1].name}</h3>
+
+                      <p>
+                          {workouts[workouts.length - 1].exercises?.length || 0} exercises
+                          {" • "}
+                          {workouts[workouts.length - 1].duration || 0} min
+                      </p>
+
+                      <p className="last-session-mood">
+                          Mood after:{" "}
+                          {getMoodAfterEmoji(workouts[workouts.length - 1].moodAfter)}
+                      </p>
                   </div>
               )}
 
