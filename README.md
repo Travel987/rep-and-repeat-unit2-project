@@ -31,7 +31,6 @@ Rep & Repeat is a full-stack workout tracking application designed to help users
 - Postman
 - Canva
 - Trello
-- Railway
 
 ## Running the Project Locally
 
