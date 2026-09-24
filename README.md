@@ -116,6 +116,6 @@ https://dbdiagram.io/d/Rep-and-Repeat-ERD-6a8b1bf0fd15a881e5dd0836
 
 ## Future Features / Unresolved Items
 
-Future improvements for Rep & Repeat could include user authentication and individual user accounts, expanded exercise libraries, additional workout analytics, personalized workout recommendations, playlists or expanded music integrations, and additional fitness progress tracking.
+Future improvements for Rep & Repeat could include expanded exercise libraries, additional workout analytics, personalized workout recommendations, user profile customization, and additional music features.
 
-Deployment configuration is also being finalized so the full application can be shared publicly outside of the local development environment.
+The current version includes user registration, login, logout, workout tracking, CRUD functionality, workout history, mood tracking, and music previews. The application is currently designed to run locally for this project submission.
