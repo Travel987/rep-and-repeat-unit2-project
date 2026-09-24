@@ -167,19 +167,18 @@
     align-items: center;
     justify-content: center;
 }
-
-.mood-picker button {
-    background: #263b4d;
-    color: white;
-    border: 1px solid #526779;
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 22px;
-    cursor: pointer;
-}
 .mood-picker button.selected-mood {
     background: #b7ff3c;
     border-color: #b7ff3c;
+    transform: scale(1.08);
+}
+
+.mood-picker button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mood-picker button:hover {
+    transform: scale(1.08);
 }
 .mood-section span {
     display: block;
