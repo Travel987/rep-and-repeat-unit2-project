@@ -362,6 +362,14 @@
     cursor: pointer;
 }
 
+button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
 .player-time {
     font-size: 12px;
     white-space: nowrap;
